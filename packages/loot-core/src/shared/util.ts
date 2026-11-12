@@ -577,6 +577,12 @@ export function looselyParseAmount(amount: string) {
   } else {
     // Replace Unicode minus with ASCII minus for non-parenthesized amounts
     amount = amount.replace(/\u2212/g, '-');
+    // Some bank exports put the minus after the number ("12.34-",
+    // "1.234,56- \u20ac"). Move it to the front so the sign isn't dropped.
+    const trailingMinus = amount.match(/^([^-]*\d[^-]*)-([^\d.,-]*)$/);
+    if (trailingMinus) {
+      amount = '-' + trailingMinus[1] + trailingMinus[2];
+    }
   }
 
   // Look for a decimal marker, then look for either 1-2 or 4-9 decimal places.

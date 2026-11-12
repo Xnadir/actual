@@ -57,6 +57,15 @@ describe('utility functions', () => {
     expect(looselyParseAmount('−3,45')).toBe(-3.45);
   });
 
+  test('looseParseAmount works with a trailing minus', () => {
+    expect(looselyParseAmount('3-')).toBe(-3);
+    expect(looselyParseAmount('3.45-')).toBe(-3.45);
+    expect(looselyParseAmount('1.234,56-')).toBe(-1234.56);
+    expect(looselyParseAmount('1,234.56- ')).toBe(-1234.56);
+    expect(looselyParseAmount('3,45- €')).toBe(-3.45);
+    expect(looselyParseAmount('3.45−')).toBe(-3.45);
+  });
+
   test('looseParseAmount works with parentheses (negative)', () => {
     expect(looselyParseAmount('(3.45)')).toBe(-3.45);
     expect(looselyParseAmount('(3)')).toBe(-3);
